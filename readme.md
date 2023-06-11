@@ -113,7 +113,7 @@ As a logged in user, we can send regular HTML form requests to the API. Just mak
   const form = document.getElementById('myForm');
   form.addEventListener('submit', function(event) {
 	event.preventDefault();
-	fetch('my-site.com/api.php?q=v0/people/create', {
+	fetch('my-site.com/api.php?q=v0/people/create/', {
 	  method: 'POST',
 	  body: new FormData(event.target)
 	})
@@ -141,7 +141,7 @@ As a logged in user, we can send regular HTML form requests to the API. Just mak
 	  return {
 		name: '',
 		submitForm() {
-		  fetch('my-site.com/api.php?q=v0/people/create', {
+		  fetch('my-site.com/api.php?q=v0/people/create/', {
 			method: 'POST',
 			body: new FormData(event.target)
 		  })
@@ -169,7 +169,7 @@ As a logged in user, we can send regular HTML form requests to the API. Just mak
   $('#myForm').submit(function(event) {
 	event.preventDefault();
 	$.ajax({
-	  url: 'my-site.com/api.php?q=v0/people/create',
+	  url: 'my-site.com/api.php?q=v0/people/create/',
 	  method: 'POST',
 	  data: $(this).serialize(),
 	  success: function(data) {

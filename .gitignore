@@ -1,0 +1,6 @@
+couch/
+couch/config.php
+*.php
+!api.php
+!couch/*.php
+couch/config.php

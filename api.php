@@ -586,22 +586,22 @@
 						{
 							"name" : "blog-posts.php",
 							"title" : "Blog Posts",
-							"exampleEnpoint" : "https://api.groveos.net/?q=v0/blog-posts/edit/&id=242"
+							"exampleEnpoint" : "https://your-site.com/api.php?q=v0/blog-posts/edit/&id=242"
 						},
 						{
 							"name" : "products.php",
 							"title" : "Products",
-							"exampleEnpoint" : "https://api.groveos.net/?q=v0/products/&limit=40"
+							"exampleEnpoint" : "https://your-site.com/api.php?q=v0/products/&limit=40"
 						},
 						{
 							"name" : "people.php",
 							"title" : "People",
-							"exampleEnpoint" : "https://api.groveos.net/?q=v0/people/&where=first_name.eq.John|age.gt.18"
+							"exampleEnpoint" : "https://your-site.com/api.php?q=v0/people/&where=first_name.eq.John|age.gt.18"
 						},
 						{
 							"name" : "comments",
 							"title" : "Comments",
-							"exampleEnpoint" : "https://api.groveos.net/?q=v0/delete/&id=212833"
+							"exampleEnpoint" : "https://your-site.com/api.php?q=v0/delete/&id=212833"
 						}
 					]
 				},
@@ -655,7 +655,7 @@
 				"endpoints" : {
 					"synopsis" : "Endpoints are the URLs that are used to interact with the API. There are four endpoints: v0.index (this one), v0.doc, v0.list, v0.create, v0.edit, and v0.delete. Endoints are documented below.",
 					"filters" : {
-						"synopsis" : "Filters are used to filter the results of a request. For instance, if we wanted to get all blog posts with the tag '242', we would use the following endpoint: https://api.groveos.net/?q=v0/blog-posts/&where=tags.eq.242. Multiple filters can be used by separating them with a pipe character ('|'). For instance, if we wanted to get all blog posts with the tag '242' and the tag '288', we would use the following endpoint: https://api.groveos.net/?q=v0/blog-posts/&where=tags.eq.242|tags.eq.288. Filters can be combined with the 'limit' and 'offset' parameters to paginate results. For instance, if we wanted to get the 10th through 20th blog posts with the tag '242' and the tag '288', we would use the following endpoint: https://api.groveos.net/?q=v0/blog-posts/&where=tags.eq.242|tags.eq.288&limit=10&offset=10.",
+						"synopsis" : "Filters are used to filter the results of a request. For instance, if we wanted to get all blog posts with the tag '242', we would use the following endpoint: https://your-site.com/api.php?q=v0/blog-posts/&where=tags.eq.242. Multiple filters can be used by separating them with a pipe character ('|'). For instance, if we wanted to get all blog posts with the tag '242' and the tag '288', we would use the following endpoint: https://your-site.com/api.php?q=v0/blog-posts/&where=tags.eq.242|tags.eq.288. Filters can be combined with the 'limit' and 'offset' parameters to paginate results. For instance, if we wanted to get the 10th through 20th blog posts with the tag '242' and the tag '288', we would use the following endpoint: https://your-site.com/api.php?q=v0/blog-posts/&where=tags.eq.242|tags.eq.288&limit=10&offset=10.",
 						"examples" : [
 							{
 								"name" : "where",

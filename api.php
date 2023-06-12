@@ -608,24 +608,25 @@
 				"systemFields" : {
 					"synopsis" : "System fields are fields that are required and optionally automatically created for each record. Each record has a 'k_page_title' (the title), 'k_page_name' (can be a random string or lowercase hyphenated version of the title), and 'k_page_date' (the publish date in Y-m-d H:i:s format). We can declare our own values here or use the default values.",
 					"examples" : [
-					{
-						"name" : "k_page_title",
-						"type" : "text",
-						"example" : "John Doe",
-						"default" : "{random_string}"
-					},
-					{
-						"name" : "k_page_name",
-						"type" : "text",
-						"example" : "john-doe",
-						"default" : "{random_string}"
-					},
-					{
-						"name" : "k_page_date",
-						"type" : "datetime",
-						"example" : "2017-01-01 00:00:00",
-						"default" : "{current_datetime}"
-					}
+						{
+							"name" : "k_page_title",
+							"type" : "text",
+							"example" : "John Doe",
+							"default" : "random_string"
+						},
+						{
+							"name" : "k_page_name",
+							"type" : "text",
+							"example" : "john-doe",
+							"default" : "random_string"
+						},
+						{
+							"name" : "k_page_date",
+							"type" : "datetime",
+							"example" : "2017-01-01 00:00:00",
+							"default" : "current_datetime"
+						}
+					]
 				},
 				"customFields" : {
 					"synopsis" : "Each record has custom fields defined by the template. These fields are documented in the 'fields' array in the template's v0.doc endpoint. Custom fields have no default value.",
@@ -633,7 +634,7 @@
 						{
 							"name" : "content",
 							"type" : "richtext",
-							"example" : "<h2>About our company</h2><p>Our company delivers innovative solutions and exceptional products/services to meet client needs. With a dedicated team, we prioritize customer satisfaction, building strong relationships based on trust. Our passion for innovation drives positive market impact.</p>",
+							"example" : "<h2>About our company</h2><p>Our company delivers innovative solutions and exceptional products/services to meet client needs. With a dedicated team, we prioritize customer satisfaction, building strong relationships based on trust. Our passion for innovation drives positive market impact.</p>"
 						},
 						{
 							"name" : "tags",
@@ -673,7 +674,6 @@
 								"example" : "10"
 							}
 						]
-					},
 					}
 				}
 			}

@@ -621,7 +621,7 @@
 
 	<cms:capture into='response.data.usage' is_json='1'>
 		{
-			"synopsis" : "The GroveOS API is a REST inspired API that uses GET and POST HTTP verbs to perform CRUD operations on records within the system. All requests must be made via HTTPS. All responses are in JSON format.",
+			"synopsis" : "This API is a REST inspired and uses GET and POST HTTP verbs to perform CRUD operations on records within the system. All requests must be made via HTTPS. All responses are in JSON format.",
 			"keyConcepts" : {
 				"templates" : {
 					"synopsis" : "Templates are representations of record types. Each template has its own set of system fields and custom fields. For instance, the People template has (1) system fields of k_page_title, k_page_date, and k_page_name and (2) custom fields of first_name and last_name whereas the Blog Posts template has (1) system fields of k_page_title, k_page_date, and k_page_name and (2) custom fields of content, tags, and author.",

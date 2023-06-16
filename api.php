@@ -220,6 +220,7 @@
 
 
 
+
 <!-- - - - - - - - - - - - - - - - -->
 
 
@@ -242,6 +243,8 @@
 
 
 <cms:capture into='request' is_json='1'>{
+	"uri" : "<cms:php>echo($_SERVER['REQUEST_URI']);</cms:php>",
+	"endpoint" : "<cms:gpc 'q' method='get' />",
 	"get" : {},
 	"post" : {},
 	"api" : {
@@ -255,12 +258,51 @@
 
 
 
-<cms:call 'print-r-to-array' string="<cms:dump_routes />" into='routes' />
+<cms:capture into='system' is_json='1'>{
+	"version" : {
+		"latest" : "0"
+	},
+	"timing" : {
+		"timestamp" : "<cms:date format='Y-m-d H:i:s' />",
+		"datetime" : "<cms:date format='c' />",
+		"date" : "<cms:date format='Y-m-d' />",
+		"time" : "<cms:date format='H:i:s' />",
+		"day" : "<cms:date format='l' />",
+		"day_short" : "<cms:date format='D' />",
+		"month" : "<cms:date format='F' />",
+		"month_short" : "<cms:date format='M' />",
+		"year" : "<cms:date format='Y' />",
+		"year_short" : "<cms:date format='y' />",
+		"day_of_week" : "<cms:date format='N' />",
+		"day_of_year" : "<cms:date format='z' />",
+		"week_of_year" : "<cms:date format='W' />",
+		"week_of_month" : "<cms:date format='W' />",
+		"leap_year" : "<cms:date format='L' />",
+		"dst" : "<cms:date format='I' />",
+		"unix_timestamp" : "<cms:date format='U' />"
+	},
+	"endpoints" : {}
+}</cms:capture>
+
+
+
+
+<cms:call 'print-r-to-array' string="<cms:dump_routes />" into='_tmpRoutes' />
 <cms:php>
 	global $CTX;
-	$arr = $CTX->get('routes')['<cms:show request.api.template.name />'];
-	$CTX->set('request.api.routes', $arr, 'global');
+	$arr = $CTX->get('_tmpRoutes')['<cms:show k_template_name />'];
+	$CTX->set('_tmpRoutes', $arr, 'global');
 </cms:php>
+<cms:each _tmpRoutes as='_tmpRoute'>
+	<cms:capture into='_tmpRouteObject' is_json='1'>
+		{
+			"name" : "<cms:show _tmpRoute.name />",
+			"path" : "<cms:show _tmpRoute.path />"
+		}
+	</cms:capture>
+	<cms:put var="_tmpRoutes.<cms:show k_count />" value=_tmpRouteObject scope='global' />
+</cms:each>
+<cms:set system.endpoints=_tmpRoutes scope='global' />
 
 
 
@@ -515,7 +557,7 @@
 -->
 
 
-<cms:set response.route=k_matched_route scope='global' />
+<cms:set response.apiEndpoint=request.endpoint />
 <cms:set repsonse.template=request.api.template scope='global' />
 
 
@@ -575,6 +617,7 @@
 <cms:if k_matched_route='v0.index'>
 
 	<cms:capture into='response.data' is_json='1'>{}</cms:capture>
+	<cms:set response.message='Listing API routes.' scope='global' />
 
 	<cms:capture into='response.data.usage' is_json='1'>
 		{
@@ -773,24 +816,7 @@
 		}
 	</cms:capture>
 
-	<cms:capture into='response.data.endpoints' is_json='1'>[]</cms:capture>
-	<cms:call 'print-r-to-array' string="<cms:dump_routes />" into='routes' />
-	<cms:php>
-		global $CTX;
-		$arr = $CTX->get('routes')['<cms:show k_template_name />'];
-		$CTX->set('routes', $arr, 'global');
-	</cms:php>
-	<cms:set response.message='Listing API routes.' scope='global' />
-	<cms:each routes as='route'>
-		<cms:capture into='route_object' is_json='1'>
-			{
-				"name" : "<cms:show route.name />",
-				"path" : "<cms:show route.path />"
-			}
-		</cms:capture>
-		<cms:put var="routes.<cms:show k_count />" value=route_object scope='global' />
-	</cms:each>
-	<cms:set response.data.endpoints=routes scope='global' />
+	<cms:set response.data.endpoints=system.endpoints scope='global' />
 
 
 

@@ -655,6 +655,99 @@
 				},
 				"endpoints" : {
 					"synopsis" : "Endpoints are the URLs that are used to interact with the API. There are four endpoints: v0.index (this one), v0.doc, v0.list, v0.create, v0.edit, and v0.delete. Endoints are documented below.",
+					"actions" : {
+						"doc" : {
+							"synopsis" : "Here, we document the fields of each template. For instance, if we wanted to get the documentation for the Blog Posts template, we would use the following endpoint: https://your-site.com/api.php?q=v0/blog-posts/doc/.",
+							"examples" : [
+								{
+									"url" : "https://your-site.com/api.php?q=v0/blog-posts/doc/",
+									"description" : "Document the blog-posts.php template."
+								},
+								{
+									"url" : "https://your-site.com/api.php?q=v0/people/doc/",
+									"description" : "Document the people.php template."
+								}
+							]
+						},
+						"list" : {
+							"synopsis" : "Here, we can list records of a given template. For instance, if we wanted to get all blog posts, we would use the following endpoint: https://your-site.com/api.php?q=v0/blog-posts/list/. Multiple records can be listed by separating them with a comma (','). List actions can be combined with the 'limit' and 'offset' parameters to paginate results.",
+							"examples" : [
+								{
+									"url" : "https://your-site.com/api.php?q=v0/blog-posts/doc/",
+									"description" : "List the first 10 blog posts."
+								},
+								{
+									"url" : "https://your-site.com/api.php?q=v0/blog-posts/doc/&limit=40",
+									"description" : "List the first 40 blog posts."
+								},
+								{
+									"url" : "https://your-site.com/api.php?q=v0/blog-posts/doc/&limit=40&offset=40",
+									"description" : "List the next set of 40 blog posts."
+								},
+								{
+									"url" : "https://your-site.com/api.php?q=v0/blog-posts/doc/&id=243",
+									"description" : "List the blog post with ID 243."
+								},
+								{
+									"url" : "https://your-site.com/api.php?q=v0/blog-posts/doc/&id=243,244,245",
+									"description" : "List the blog posts with ID 243, 244, and 245."
+								},
+								{
+									"url" : "https://your-site.com/api.php?q=v0/blog-posts/doc/&where=tags.eq.242",
+									"description" : "List all blog posts with the tag '242'."
+								},
+								{
+									"url" : "https://your-site.com/api.php?q=v0/blog-posts/doc/&where=tags.eq.242&limit=40",
+									"description" : "List the blog posts with the tag '242', but limit to the first 40."
+								}
+							]
+						},
+						"create" : {
+							"synopsis" : "Here, we can create a new record of a given template. For instance, if we wanted to create a new blog post, we would use the following endpoint: https://your-site.com/api.php?q=v0/blog-posts/create/. Note that create endoint requires POST values and won't accept GET parameters. For instance, if we wanted to create a new blog post with the title 'About our company', this following endpoint would not work: https://your-site.com/api.php?q=v0/blog-posts/create/&k_page_title=About%20our%20company. Instead, POST a form-urlencoded string either via JS fetch, curl, or similar HTTP tool.",
+							"examples" : [
+								{
+									"url" : "https://your-site.com/api.php?q=v0/blog-posts/create/",
+									"description" : "Create a new blog post with title 'About our Company' and related tags '242,288'.",
+									"instructions" : {
+										"viaCurl" : "curl -s -d 'k_page_title=About%20our%20company&tags=242,288' -d api_key=$my-api-key https://your-site.com/api.php?q=v0/blog-posts/create/",
+										"viaForm" : "Set up an HTML form with fields named 'k_page_title and 'tags', and submit a POST request to https://your-site.com/api.php?q=v0/blog-posts/create/."
+									}
+								},
+								{
+									"description" : "Create a new person with the name 'Julie Stewart'.",
+									"url" : "https://your-site.com/api.php?q=v0/blog-posts/create/&k_page_title=Julie%20Stewart&first_name=Julie&last_name=Stewart",
+									"instructions" : {
+										"viaCurl" : "curl -s -d 'k_page_title=Julie%20Stewart&first_name=Julie&last_name=Stewart' -d api_key=$my-api-key https://your-site.com/api.php?q=v0/people/create/",
+										"viaForm" : "Set up an HTML form with fields named 'k_page_title', 'first_name', and 'last_name', and submit a POST request to https://your-site.com/api.php?q=v0/people/create/."
+									}
+								}
+							]
+						},
+						"edit" : {
+							"synopsis" : "Here, we can edit a given record of a given template. For instance, if we wanted to edit the blog post with ID 243, we would use the following endpoint: https://your-site.com/api.php?q=v0/blog-posts/edit/&id=243. Note that edit endoint requires POST values and won't accept GET parameters outside of the record's ID. For instance, if we wanted to edit the blog post with ID 243 with the title 'About our company', this following endpoint would not work: https://your-site.com/api.php?q=v0/blog-posts/edit/&id=243&k_page_title=About%20our%20company. Instead, POST a form-urlencoded string either via JS fetch, curl, or similar HTTP tool.",
+							"examples" : [
+								{
+									"url" : "https://your-site.com/api.php?q=v0/blog-posts/edit/&id=243",
+									"description" : "Edit the blog post with ID 243 with title 'About our Company'.",
+									"instructions" : {
+										"viaCurl" : "curl -s -d 'k_page_title=About%20our%20company' -d api_key=$my-api-key https://your-site.com/api.php?q=v0/blog-posts/edit/&id=243",
+										"viaForm" : "Set up an HTML form with a field named 'k_page_title', and submit a POST request to https://your-site.com/api.php?q=v0/blog-posts/edit/&id=243."
+									}
+								},
+								{
+									"description" : "Edit the person with ID 243 with the name 'Julie Stewart'.",
+									"url" : "https://your-site.com/api.php?q=v0/people/edit/&id=243&k_page_title=Julie%20Stewart&first_name=Julie&last_name=Stewart",
+									"instructions" : {
+										"viaCurl" : "curl -s -d 'k_page_title=Julie%20Stewart&first_name=Julie&last_name=Stewart' -d api_key=$my-api-key https://your-site.com/api.php?q=v0/people/edit/&id=243",
+										"viaForm" : "Set up an HTML form with fields named 'k_page_title', 'first_name', and 'last_name', and submit a POST request to https://your-site.com/api.php?q=v0/people/edit/&id=243."
+									}
+								}
+							]
+						},
+						"delete" : {
+							"synopsis" : {}
+						}
+					},
 					"filters" : {
 						"synopsis" : "Filters are used to filter the results of a request. For instance, if we wanted to get all blog posts with the tag '242', we would use the following endpoint: https://your-site.com/api.php?q=v0/blog-posts/&where=tags.eq.242. Multiple filters can be used by separating them with a pipe character ('|'). For instance, if we wanted to get all blog posts with the tag '242' and the tag '288', we would use the following endpoint: https://your-site.com/api.php?q=v0/blog-posts/&where=tags.eq.242|tags.eq.288. Filters can be combined with the 'limit' and 'offset' parameters to paginate results. For instance, if we wanted to get the 10th through 20th blog posts with the tag '242' and the tag '288', we would use the following endpoint: https://your-site.com/api.php?q=v0/blog-posts/&where=tags.eq.242|tags.eq.288&limit=10&offset=10.",
 						"examples" : [

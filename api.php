@@ -263,23 +263,23 @@
 		"latest" : "0"
 	},
 	"timing" : {
-		"timestamp" : "<cms:date format='Y-m-d H:i:s' />",
-		"datetime" : "<cms:date format='c' />",
-		"date" : "<cms:date format='Y-m-d' />",
-		"time" : "<cms:date format='H:i:s' />",
-		"day" : "<cms:date format='l' />",
-		"day_short" : "<cms:date format='D' />",
-		"month" : "<cms:date format='F' />",
-		"month_short" : "<cms:date format='M' />",
-		"year" : "<cms:date format='Y' />",
-		"year_short" : "<cms:date format='y' />",
-		"day_of_week" : "<cms:date format='N' />",
-		"day_of_year" : "<cms:date format='z' />",
-		"week_of_year" : "<cms:date format='W' />",
-		"week_of_month" : "<cms:date format='W' />",
-		"leap_year" : "<cms:date format='L' />",
-		"dst" : "<cms:date format='I' />",
-		"unix_timestamp" : "<cms:date format='U' />"
+		"timestamp" : "<cms:escape_json><cms:date format='Y-m-d H:i:s' /></cms:escape_json>",
+		"datetime" : "<cms:escape_json><cms:date format='c' /></cms:escape_json>",
+		"date" : "<cms:escape_json><cms:date format='Y-m-d' /></cms:escape_json>",
+		"time" : "<cms:escape_json><cms:date format='H:i:s' /></cms:escape_json>",
+		"day" : "<cms:escape_json><cms:date format='l' /></cms:escape_json>",
+		"day_short" : "<cms:escape_json><cms:date format='D' /></cms:escape_json>",
+		"month" : "<cms:escape_json><cms:date format='F' /></cms:escape_json>",
+		"month_short" : "<cms:escape_json><cms:date format='M' /></cms:escape_json>",
+		"year" : "<cms:escape_json><cms:date format='Y' /></cms:escape_json>",
+		"year_short" : "<cms:escape_json><cms:date format='y' /></cms:escape_json>",
+		"day_of_week" : "<cms:escape_json><cms:date format='N' /></cms:escape_json>",
+		"day_of_year" : "<cms:escape_json><cms:date format='z' /></cms:escape_json>",
+		"week_of_year" : "<cms:escape_json><cms:date format='W' /></cms:escape_json>",
+		"week_of_month" : "<cms:escape_json><cms:date format='W' /></cms:escape_json>",
+		"leap_year" : "<cms:escape_json><cms:date format='L' /></cms:escape_json>",
+		"dst" : "<cms:escape_json><cms:date format='I' /></cms:escape_json>",
+		"unix_timestamp" : "<cms:escape_json><cms:date format='U' /</>"
 	},
 	"endpoints" : {}
 }</cms:capture>
@@ -296,8 +296,8 @@
 <cms:each _tmpRoutes as='_tmpRoute'>
 	<cms:capture into='_tmpRouteObject' is_json='1'>
 		{
-			"name" : "<cms:show _tmpRoute.name />",
-			"path" : "<cms:show _tmpRoute.path />"
+			"name" : "<cms:escape_json><cms:show _tmpRoute.name /></cms:escape_json>",
+			"path" : "<cms:escape_json><cms:show _tmpRoute.path /></cms:escape_json>"
 		}
 	</cms:capture>
 	<cms:put var="_tmpRoutes.<cms:show k_count />" value=_tmpRouteObject scope='global' />
@@ -362,10 +362,10 @@
 <cms:templates skip_system='0'>
 
 	<cms:capture into='request.api.templates.' is_json='1'>{
-		"id" : "<cms:show k_template_id />",
-		"name" : "<cms:show k_template_name />",
-		"title" : "<cms:show k_template_title />",
-		"basename" : "<cms:php>echo basename("<cms:show k_template_name />", '.php');</cms:php>",
+		"id" : "<cms:escape_json><cms:show k_template_id /></cms:escape_json>",
+		"name" : "<cms:escape_json><cms:show k_template_name /></cms:escape_json>",
+		"title" : "<cms:escape_json><cms:show k_template_title /></cms:escape_json>",
+		"basename" : "<cms:escape_json><cms:php>echo basename("<cms:show k_template_name />", '.php');</cms:php></cms:escape_json>",
 		"fields" : {}
 	}</cms:capture>
 
@@ -583,7 +583,7 @@
 
 <cms:each var="k_page_title | k_page_name | k_page_date">
 	<cms:capture into='request.resource.postables.' is_json='1'>{
-		"name" : "<cms:show item />",
+		"name" : "<cms:escape_json><cms:show item /></cms:escape_json>",
 		"type" : "text"
 	}</cms:capture>
 </cms:each>
@@ -833,8 +833,8 @@
 		<cms:capture into="request.api.templates.<cms:show k_count />.fields" is_json='1'>[
 			<cms:each template.fields as='field'>
 				{
-					"name" : "<cms:show field.name />",
-					"type" : "<cms:show field.type />"
+					"name" : "<cms:escape_json><cms:show field.name /></cms:escape_json>",
+					"type" : "<cms:escape_json><cms:show field.type /></cms:escape_json>"
 				}<cms:if k_last_item='0'>,</cms:if>
 			</cms:each>
 		]</cms:capture>
@@ -880,6 +880,7 @@
 				<cms:set response.message="Created '<cms:show request.api.template.title />' record (<cms:show k_last_insert_id />)." scope='global' />
 				<cms:capture into='response.data' is_json='1'>{}</cms:capture>
 				<cms:pages masterpage=request.api.template.name id=k_last_insert_id show_future_entries='1'>
+					<cms:put var='response.data.k_page_id' value=k_last_insert_id scope='global' />
 					<cms:put var='response.data.k_page_title' value=k_page_title scope='global' />
 					<cms:put var='response.data.k_page_name' value=k_page_name scope='global' />
 					<cms:put var='response.data.k_page_date' value=k_page_date scope='global' />
@@ -917,6 +918,7 @@
 	<cms:put var='request.get.stops_before' value="<cms:gpc 'stops_before' method='get' />" scope='global' />
 	<cms:put var='request.get.limit' value="<cms:gpc 'limit' method='get' />" scope='global' />
 	<cms:if request.get.limit gt '100'><cms:call 'api-abort' message='Cannot request more than 100 records.' /></cms:if>
+	<cms:put var='request.get.future_entries' value="<cms:gpc 'future_entries' method='get' />" scope='global' />
 	<cms:put var='request.get.offset' value="<cms:gpc 'offset' method='get' />" scope='global' />
 	<cms:put var='request.get.order' value="<cms:gpc 'order' method='get' />" scope='global' />
 	<cms:put var='request.get.keywords' value="<cms:gpc 'keywords' method='get' />" scope='global' />
@@ -948,7 +950,7 @@
 	<cms:capture into='response.hasMore'></cms:capture>
 	<cms:capture into='response.data' is_json='1'>[]</cms:capture>
 
-	<cms:pages masterpage=request.api.template.name offset=request.get.offset order=request.get.order keywords=request.get.keywords custom_field="<cms:each request.get.formatted_where><cms:show item.key /><cms:show item.operator /><cms:show item.value /><cms:if k_last_item='0'>|</cms:if></cms:each>" limit="<cms:if request.get.limit><cms:show request.get.limit /><cms:else />10</cms:if>" id=request.api.id>
+	<cms:pages masterpage=request.api.template.name offset=request.get.offset order=request.get.order keywords=request.get.keywords custom_field="<cms:each request.get.formatted_where><cms:show item.key /><cms:show item.operator /><cms:show item.value /><cms:if k_last_item='0'>|</cms:if></cms:each>" limit="<cms:if request.get.limit><cms:show request.get.limit /><cms:else />10</cms:if>" id=request.api.id show_future_entries=request.get.future_entries>
 
 		<cms:if k_paginated_top>
 			<cms:php>
@@ -981,10 +983,10 @@
 		
 		<cms:set record_index="<cms:sub k_count '1' />" />
 		<cms:capture into='response.data.' is_json='1'>{
-			"id" : "<cms:show k_page_id />",
-			"k_page_name" : "<cms:show k_page_name />",
-			"k_page_title" : "<cms:show k_page_title />",
-			"k_page_date" : "<cms:date format='Y-m-d H:i:s' />",
+			"id" : "<cms:escape_json><cms:show k_page_id /></cms:escape_json>",
+			"k_page_name" : "<cms:escape_json><cms:show k_page_name /></cms:escape_json>",
+			"k_page_title" : "<cms:escape_json><cms:show k_page_title /></cms:escape_json>",
+			"k_page_date" : "<cms:escape_json><cms:date format='Y-m-d H:i:s' /></cms:escape_json>",
 			"fields" : {}
 		}</cms:capture>
 
@@ -1001,8 +1003,8 @@
 				<cms:set row_index='0' />
 				<cms:show_mosaic field.name>
 					<cms:capture into="response.data.<cms:show record_index />.fields.<cms:show field.name />.rows." is_json='1'>{
-						"type" : "<cms:show k_tile_name />",
-						"label" : "<cms:show k_tile_label />",
+						"type" : "<cms:escape_json><cms:show k_tile_name /></cms:escape_json>",
+						"label" : "<cms:escape_json><cms:show k_tile_label /></cms:escape_json>",
 						"fields" : []
 					}</cms:capture>
 					<cms:each field.tiles as='tile'>

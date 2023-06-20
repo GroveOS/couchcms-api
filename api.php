@@ -267,7 +267,7 @@
 }</cms:capture>
 <!-- Make sure request.api.id is valid -->
 <cms:set id_is_valid="<cms:validate request.api.id validator='non_zero_integer' />" />
-<cms:if id_is_valid='0'>
+<cms:if request.api.id && id_is_valid='0'>
 	<cms:call 'api-abort' message='Invalid ID' />
 </cms:if>
 

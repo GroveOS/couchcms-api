@@ -32,6 +32,29 @@
 
 
 
+<cms:func 'api-respond'>
+	<cms:abort>
+		<cms:show response as_json='1' />
+	</cms:abort>
+</cms:func>
+
+
+
+
+<cms:func 'api-abort' message='Request failed'>
+	<cms:set response.message=message scope='global' />
+	<cms:php>
+		global $CTX;
+		$arr = $CTX->get('response');
+		$arr['success'] = false;
+		$CTX->set('response', $arr, 'global');
+	</cms:php>
+	<cms:call 'api-respond' />
+</cms:func>
+
+
+
+
 <cms:func 'curl'
 	url="<cms:add_querystring k_site_link querystring='view=json' />"
 	method='get'
@@ -185,35 +208,17 @@
 
 
 <cms:func 'resource-by-id' id='' into='resource-response'>
-	<cms:query sql="SELECT * FROM <cms:php>echo K_TBL_PAGES;</cms:php> WHERE id='<cms:show id />'">
-		<cms:capture into=into is_json='1'>{
-			"id" : "<cms:show id />",
-			"template" : "<cms:templates><cms:if k_template_id=template_id><cms:show k_template_name /></cms:if></cms:templates>"
-		}</cms:capture>
-	</cms:query>
-</cms:func>
-
-
-
-
-<cms:func 'api-respond'>
-	<cms:abort>
-		<cms:show response as_json='1' />
-	</cms:abort>
-</cms:func>
-
-
-
-
-<cms:func 'api-abort' message='Request failed'>
-	<cms:set response.message=message scope='global' />
-	<cms:php>
-		global $CTX;
-		$arr = $CTX->get('response');
-		$arr['success'] = false;
-		$CTX->set('response', $arr, 'global');
-	</cms:php>
-	<cms:call 'api-respond' />
+	<cms:set id_is_valid="<cms:validate value=id validator='non_zero_integer' />" />
+	<cms:if id_is_valid>
+		<cms:query sql="SELECT * FROM <cms:php>echo K_TBL_PAGES;</cms:php> WHERE id='<cms:show id />'">
+			<cms:capture into=into is_json='1'>{
+				"id" : "<cms:show id />",
+				"template" : "<cms:templates><cms:if k_template_id=template_id><cms:show k_template_name /></cms:if></cms:templates>"
+			}</cms:capture>
+		</cms:query>
+	<cms:else />
+		<cms:call 'api-abort' message='Invalid ID' />
+	</cms:if>
 </cms:func>
 
 
@@ -279,7 +284,7 @@
 		"week_of_month" : "<cms:escape_json><cms:date format='W' /></cms:escape_json>",
 		"leap_year" : "<cms:escape_json><cms:date format='L' /></cms:escape_json>",
 		"dst" : "<cms:escape_json><cms:date format='I' /></cms:escape_json>",
-		"unix_timestamp" : "<cms:escape_json><cms:date format='U' /</>"
+		"unix_timestamp" : "<cms:escape_json><cms:date format='U' /></cms:escape_json>"
 	},
 	"endpoints" : {}
 }</cms:capture>

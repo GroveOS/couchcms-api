@@ -3,6 +3,12 @@
 <cms:content_type 'application/json' />
 
 
+<cms:capture into='response' is_json='1'>{
+	"success" : true,
+	"message" : "Reached API"
+}</cms:capture>
+
+
 <!--
 	:: FUNCTIONS
 	| 'dd' -- die and dump, for debugging
@@ -259,6 +265,11 @@
 	},
 	"api_key" : "<cms:call 'post-or-get' var='api_key' />"
 }</cms:capture>
+<!-- Make sure request.api.id is valid -->
+<cms:set id_is_valid="<cms:validate request.api.id validator='non_zero_integer' />" />
+<cms:if id_is_valid='0'>
+	<cms:call 'api-abort' message='Invalid ID' />
+</cms:if>
 
 
 
@@ -268,23 +279,23 @@
 		"latest" : "0"
 	},
 	"timing" : {
-		"timestamp" : "<cms:escape_json><cms:date format='Y-m-d H:i:s' /></cms:escape_json>",
-		"datetime" : "<cms:escape_json><cms:date format='c' /></cms:escape_json>",
-		"date" : "<cms:escape_json><cms:date format='Y-m-d' /></cms:escape_json>",
-		"time" : "<cms:escape_json><cms:date format='H:i:s' /></cms:escape_json>",
-		"day" : "<cms:escape_json><cms:date format='l' /></cms:escape_json>",
-		"day_short" : "<cms:escape_json><cms:date format='D' /></cms:escape_json>",
-		"month" : "<cms:escape_json><cms:date format='F' /></cms:escape_json>",
-		"month_short" : "<cms:escape_json><cms:date format='M' /></cms:escape_json>",
-		"year" : "<cms:escape_json><cms:date format='Y' /></cms:escape_json>",
-		"year_short" : "<cms:escape_json><cms:date format='y' /></cms:escape_json>",
-		"day_of_week" : "<cms:escape_json><cms:date format='N' /></cms:escape_json>",
-		"day_of_year" : "<cms:escape_json><cms:date format='z' /></cms:escape_json>",
-		"week_of_year" : "<cms:escape_json><cms:date format='W' /></cms:escape_json>",
-		"week_of_month" : "<cms:escape_json><cms:date format='W' /></cms:escape_json>",
-		"leap_year" : "<cms:escape_json><cms:date format='L' /></cms:escape_json>",
-		"dst" : "<cms:escape_json><cms:date format='I' /></cms:escape_json>",
-		"unix_timestamp" : "<cms:escape_json><cms:date format='U' /></cms:escape_json>"
+		"timestamp" : "<cms:date format='Y-m-d H:i:s' />",
+		"datetime" : "<cms:date format='c' />",
+		"date" : "<cms:date format='Y-m-d' />",
+		"time" : "<cms:date format='H:i:s' />",
+		"day" : "<cms:date format='l' />",
+		"day_short" : "<cms:date format='D' />",
+		"month" : "<cms:date format='F' />",
+		"month_short" : "<cms:date format='M' />",
+		"year" : "<cms:date format='Y' />",
+		"year_short" : "<cms:date format='y' />",
+		"day_of_week" : "<cms:date format='N' />",
+		"day_of_year" : "<cms:date format='z' />",
+		"week_of_year" : "<cms:date format='W' />",
+		"week_of_month" : "<cms:date format='W' />",
+		"leap_year" : "<cms:date format='L' />",
+		"dst" : "<cms:date format='I' />",
+		"unix_timestamp" : "<cms:date format='U' />"
 	},
 	"endpoints" : {}
 }</cms:capture>
@@ -301,21 +312,13 @@
 <cms:each _tmpRoutes as='_tmpRoute'>
 	<cms:capture into='_tmpRouteObject' is_json='1'>
 		{
-			"name" : "<cms:escape_json><cms:show _tmpRoute.name /></cms:escape_json>",
-			"path" : "<cms:escape_json><cms:show _tmpRoute.path /></cms:escape_json>"
+			"name" : "<cms:show _tmpRoute.name />",
+			"path" : "<cms:show _tmpRoute.path />"
 		}
 	</cms:capture>
 	<cms:put var="_tmpRoutes.<cms:show k_count />" value=_tmpRouteObject scope='global' />
 </cms:each>
 <cms:set system.endpoints=_tmpRoutes scope='global' />
-
-
-
-
-<cms:capture into='response' is_json='1'>{
-	"success" : true,
-	"message" : "Reached API"
-}</cms:capture>
 
 
 
@@ -367,10 +370,10 @@
 <cms:templates skip_system='0'>
 
 	<cms:capture into='request.api.templates.' is_json='1'>{
-		"id" : "<cms:escape_json><cms:show k_template_id /></cms:escape_json>",
-		"name" : "<cms:escape_json><cms:show k_template_name /></cms:escape_json>",
-		"title" : "<cms:escape_json><cms:show k_template_title /></cms:escape_json>",
-		"basename" : "<cms:escape_json><cms:php>echo basename("<cms:show k_template_name />", '.php');</cms:php></cms:escape_json>",
+		"id" : "<cms:show k_template_id />",
+		"name" : "<cms:show k_template_name />",
+		"title" : "<cms:show k_template_title />",
+		"basename" : "<cms:php>echo basename("<cms:show k_template_name />", '.php');</cms:php>",
 		"fields" : {}
 	}</cms:capture>
 
@@ -588,7 +591,7 @@
 
 <cms:each var="k_page_title | k_page_name | k_page_date">
 	<cms:capture into='request.resource.postables.' is_json='1'>{
-		"name" : "<cms:escape_json><cms:show item /></cms:escape_json>",
+		"name" : "<cms:show item />",
 		"type" : "text"
 	}</cms:capture>
 </cms:each>
@@ -838,8 +841,8 @@
 		<cms:capture into="request.api.templates.<cms:show k_count />.fields" is_json='1'>[
 			<cms:each template.fields as='field'>
 				{
-					"name" : "<cms:escape_json><cms:show field.name /></cms:escape_json>",
-					"type" : "<cms:escape_json><cms:show field.type /></cms:escape_json>"
+					"name" : "<cms:show field.name />",
+					"type" : "<cms:show field.type />"
 				}<cms:if k_last_item='0'>,</cms:if>
 			</cms:each>
 		]</cms:capture>
@@ -988,10 +991,10 @@
 		
 		<cms:set record_index="<cms:sub k_count '1' />" />
 		<cms:capture into='response.data.' is_json='1'>{
-			"id" : "<cms:escape_json><cms:show k_page_id /></cms:escape_json>",
-			"k_page_name" : "<cms:escape_json><cms:show k_page_name /></cms:escape_json>",
-			"k_page_title" : "<cms:escape_json><cms:show k_page_title /></cms:escape_json>",
-			"k_page_date" : "<cms:escape_json><cms:date format='Y-m-d H:i:s' /></cms:escape_json>",
+			"id" : "<cms:show k_page_id />",
+			"k_page_name" : "<cms:show k_page_name />",
+			"k_page_title" : "<cms:show k_page_title />",
+			"k_page_date" : "<cms:date format='Y-m-d H:i:s' />",
 			"fields" : {}
 		}</cms:capture>
 
@@ -1008,8 +1011,8 @@
 				<cms:set row_index='0' />
 				<cms:show_mosaic field.name>
 					<cms:capture into="response.data.<cms:show record_index />.fields.<cms:show field.name />.rows." is_json='1'>{
-						"type" : "<cms:escape_json><cms:show k_tile_name /></cms:escape_json>",
-						"label" : "<cms:escape_json><cms:show k_tile_label /></cms:escape_json>",
+						"type" : "<cms:show k_tile_name />",
+						"label" : "<cms:show k_tile_label />",
 						"fields" : []
 					}</cms:capture>
 					<cms:each field.tiles as='tile'>
